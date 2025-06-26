@@ -1,0 +1,49 @@
+# Compiler files
+cache/
+out/
+
+# Ignores development broadcast logs
+/broadcast/
+
+# Docs
+docs/
+
+# Dotenv file
+.env
+# Logs
+logs/
+# Ignore node_modules
+node_modules/
+# Ignore yarn
+yarn.lock
+# Ignore pnpm
+pnpm-lock.yaml
+# Ignore bun
+bun.lockb
+# Ignore next
+.next/
+# Ignore dist
+dist/
+# Ignore build
+build/
+# Ignore coverage
+coverage/
+# Ignore .DS_Store
+.DS_Store
+# Ignore .env
+.env*
+# Ignore .env.local
+.env.local
+# Ignore .env.development.local
+.env.development.local
+# Ignore .env.test.local
+.env.test.local
+# Ignore .env.production.local
+.env.production.local
+# Ignore .env.development
+.env.development
+# Ignore .env.test
+.env.test
+# Ignore .env.production
+.env.production
+# Ignore .env.development
