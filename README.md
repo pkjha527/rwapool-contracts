@@ -1,66 +1,18 @@
-## Foundry
+# RWAPool Contracts
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+## Contract Addresses on RootVX Testnet Chain
 
-Foundry consists of:
+- **wUSDC**: `0x4D710CDEAB50C3E0d4611eE7BC375650aeB239bD`
+- **rGold**: `0x7CD5F96F8ebB1051870f6d151DF28e22Ec6aC9Dc`
+- **rInst**: `0x343eD9203c6BE1372De84b0f4Aed622bff60f193`
+- **rYield**: `0x4d022E1759eAca7a270a783A70d0eFF86ca0D051`
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## Env Variables Required to Deploy
 
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
 ```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+PRIVATE_KEY=
+USDC_ADDRESS=
+VAULT_NAME="Gold Treasury Yield"
+VAULT_SYMBOL=rYield
+RPC_URL=
 ```
