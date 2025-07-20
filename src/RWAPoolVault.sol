@@ -13,8 +13,10 @@ contract RWAPoolVault is ERC20, Ownable, ReentrancyGuard, Pausable {
     using SafeERC20 for IERC20;
 
     IERC20 public immutable USDC;
-    uint256 public constant MINT_RATIO_NUMERATOR = 998;
-    uint256 public constant MINT_RATIO_DENOMINATOR = 1000;
+
+    // Mint ratio configurable via constructor
+    uint256 public immutable mintRatioNumerator;
+    uint256 public immutable mintRatioDenominator;
 
     // Admin management
     mapping(address => bool) public adminAddresses;
@@ -41,12 +43,21 @@ contract RWAPoolVault is ERC20, Ownable, ReentrancyGuard, Pausable {
         _;
     }
 
-    constructor(address usdcAddress, string memory name, string memory symbol) ERC20(name, symbol) Ownable() {
+    constructor(
+        address usdcAddress,
+        string memory name,
+        string memory symbol,
+        uint256 _mintRatioNumerator,
+        uint256 _mintRatioDenominator
+    ) ERC20(name, symbol) Ownable() {
         require(usdcAddress != address(0), "Invalid USDC address");
+        require(_mintRatioNumerator > 0 && _mintRatioNumerator <= _mintRatioDenominator, "Invalid mint ratio");
 
         _transferOwnership(msg.sender);
 
         USDC = IERC20(usdcAddress);
+        mintRatioNumerator = _mintRatioNumerator;
+        mintRatioDenominator = _mintRatioDenominator;
     }
 
     // Minting function
@@ -55,7 +66,7 @@ contract RWAPoolVault is ERC20, Ownable, ReentrancyGuard, Pausable {
         require(to != address(0), "Cannot mint to zero address");
 
         uint256 usdcAmount =
-            Math.mulDiv(amount, MINT_RATIO_DENOMINATOR * 1e6, MINT_RATIO_NUMERATOR * 1e18, Math.Rounding.Up);
+            Math.mulDiv(amount, mintRatioDenominator * 1e6, mintRatioNumerator * 1e18, Math.Rounding.Up);
 
         require(usdcAmount > 0, "USDC amount too small");
         USDC.safeTransferFrom(msg.sender, address(this), usdcAmount);
@@ -90,16 +101,15 @@ contract RWAPoolVault is ERC20, Ownable, ReentrancyGuard, Pausable {
     }
 
     // View functions for transparency
-    function calculateUsdcRequired(uint256 vaultTokenAmount) public pure returns (uint256) {
-        return
-            Math.mulDiv(vaultTokenAmount, MINT_RATIO_DENOMINATOR * 1e6, MINT_RATIO_NUMERATOR * 1e18, Math.Rounding.Up);
+    function calculateUsdcRequired(uint256 vaultTokenAmount) public view returns (uint256) {
+        return Math.mulDiv(vaultTokenAmount, mintRatioDenominator * 1e6, mintRatioNumerator * 1e18, Math.Rounding.Up);
     }
 
     function getContractUsdcBalance() external view returns (uint256) {
         return USDC.balanceOf(address(this));
     }
 
-    function getExchangeRate() external pure returns (uint256 usdcPer1000vaultToken) {
+    function getExchangeRate() external view returns (uint256 usdcPer1000vaultToken) {
         // Returns USDC (6 decimals) needed for 1000 vaultToken tokens
         return calculateUsdcRequired(1000 * 1e18);
     }
