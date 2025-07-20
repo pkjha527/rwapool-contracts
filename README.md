@@ -3,16 +3,21 @@
 ## Contract Addresses on RootVX Testnet Chain
 
 - **wUSDC**: `0x4D710CDEAB50C3E0d4611eE7BC375650aeB239bD`
-- **rGold**: `0x7CD5F96F8ebB1051870f6d151DF28e22Ec6aC9Dc`
-- **rInst**: `0x343eD9203c6BE1372De84b0f4Aed622bff60f193`
-- **rYield**: `0x4d022E1759eAca7a270a783A70d0eFF86ca0D051`
+- **rGold**: `0x599528F04F2A142eA404dEcE2975070D558CfA0d`
+- **rInst**: `0x2912E081Ddc44b815820D618A6923Dd78c9E41FB`
+- **rYield**: `0x6653279A4C5c1a19b27C30C0727154883A4E914E`
+
+## Contract Addresses on Ethereum Sepolia Testnet
+
+- **wUSDC**: `0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238`
+- **rGold**: `0xd37C820bF7C46ee98F7a3661dc7ed9c47fc41B26`
+- **rInst**: `0xC274d3aD97998E01ded04F0ca23DA4A4c5CBd0f4`
+- **rYield**: `0xdeCBCb7085055C07cd47c03688f1F11fCe1Ac4FD`
 
 ## Env Variables Required to Deploy
 
 ```
 PRIVATE_KEY=
 USDC_ADDRESS=
-VAULT_NAME="Gold Treasury Yield"
-VAULT_SYMBOL=rYield
 RPC_URL=
 ```
