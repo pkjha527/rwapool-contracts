@@ -21,11 +21,7 @@ contract RWAPoolVault is ERC20, Ownable, ReentrancyGuard, Pausable {
 
     // Events
     event USDCReceived(address indexed from, uint256 usdcAmount);
-    event VaultTokenMinted(
-        address indexed to,
-        uint256 amount,
-        uint256 usdcAmount
-    );
+    event VaultTokenMinted(address indexed to, uint256 amount, uint256 usdcAmount);
     event USDCWithdrawn(address indexed to, uint256 amount);
     event AdminAdded(address indexed admin);
     event AdminRemoved(address indexed admin);
@@ -41,18 +37,11 @@ contract RWAPoolVault is ERC20, Ownable, ReentrancyGuard, Pausable {
 
     // Modifiers
     modifier onlyOwnerOrAdmin() {
-        require(
-            msg.sender == owner() || adminAddresses[msg.sender],
-            "Not owner or admin"
-        );
+        require(msg.sender == owner() || adminAddresses[msg.sender], "Not owner or admin");
         _;
     }
 
-    constructor(
-        address usdcAddress,
-        string memory name,
-        string memory symbol
-    ) ERC20(name, symbol) Ownable() {
+    constructor(address usdcAddress, string memory name, string memory symbol) ERC20(name, symbol) Ownable() {
         require(usdcAddress != address(0), "Invalid USDC address");
 
         _transferOwnership(msg.sender);
@@ -61,19 +50,12 @@ contract RWAPoolVault is ERC20, Ownable, ReentrancyGuard, Pausable {
     }
 
     // Minting function
-    function mint(
-        address to,
-        uint256 amount
-    ) public nonReentrant whenNotPaused {
+    function mint(address to, uint256 amount) public nonReentrant whenNotPaused {
         require(amount > 0, "Amount must be greater than 0");
         require(to != address(0), "Cannot mint to zero address");
 
-        uint256 usdcAmount = Math.mulDiv(
-            amount,
-            MINT_RATIO_DENOMINATOR * 1e6,
-            MINT_RATIO_NUMERATOR * 1e18,
-            Math.Rounding.Up
-        );
+        uint256 usdcAmount =
+            Math.mulDiv(amount, MINT_RATIO_DENOMINATOR * 1e6, MINT_RATIO_NUMERATOR * 1e18, Math.Rounding.Up);
 
         require(usdcAmount > 0, "USDC amount too small");
         USDC.safeTransferFrom(msg.sender, address(this), usdcAmount);
@@ -98,9 +80,7 @@ contract RWAPoolVault is ERC20, Ownable, ReentrancyGuard, Pausable {
     }
 
     // Withdrawal function
-    function withdrawUSDC(
-        uint256 amount
-    ) public onlyOwnerOrAdmin nonReentrant whenNotPaused {
+    function withdrawUSDC(uint256 amount) public onlyOwnerOrAdmin nonReentrant whenNotPaused {
         require(amount > 0, "Amount must be greater than 0");
         uint256 contractBalance = USDC.balanceOf(address(this));
         require(contractBalance >= amount, "Insufficient USDC balance");
@@ -110,27 +90,16 @@ contract RWAPoolVault is ERC20, Ownable, ReentrancyGuard, Pausable {
     }
 
     // View functions for transparency
-    function calculateUsdcRequired(
-        uint256 vaultTokenAmount
-    ) public pure returns (uint256) {
+    function calculateUsdcRequired(uint256 vaultTokenAmount) public pure returns (uint256) {
         return
-            Math.mulDiv(
-                vaultTokenAmount,
-                MINT_RATIO_DENOMINATOR * 1e6,
-                MINT_RATIO_NUMERATOR * 1e18,
-                Math.Rounding.Up
-            );
+            Math.mulDiv(vaultTokenAmount, MINT_RATIO_DENOMINATOR * 1e6, MINT_RATIO_NUMERATOR * 1e18, Math.Rounding.Up);
     }
 
     function getContractUsdcBalance() external view returns (uint256) {
         return USDC.balanceOf(address(this));
     }
 
-    function getExchangeRate()
-        external
-        pure
-        returns (uint256 usdcPer1000vaultToken)
-    {
+    function getExchangeRate() external pure returns (uint256 usdcPer1000vaultToken) {
         // Returns USDC (6 decimals) needed for 1000 vaultToken tokens
         return calculateUsdcRequired(1000 * 1e18);
     }

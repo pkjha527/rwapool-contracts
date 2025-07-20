@@ -29,19 +29,10 @@ contract DeployVault is Script {
         // Deploy the vault contracts with msg.sender as the initial owner and USDC address
         for (uint256 i = 0; i < vaults.length; i++) {
             VaultConfig memory config = vaults[i];
-            RWAPoolVault vault = new RWAPoolVault(
-                usdcAddress,
-                config.name,
-                config.symbol
-            );
+            RWAPoolVault vault = new RWAPoolVault(usdcAddress, config.name, config.symbol);
 
             // Log the deployed contract address
-            console.log(
-                "Vault deployed to:",
-                address(vault),
-                "with symbol:",
-                config.symbol
-            );
+            console.log("Vault deployed to:", address(vault), "with symbol:", config.symbol);
         }
 
         // Stop broadcasting transactions
